@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volume Adonan Loyang — Integral Matematika</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root {
+  --pink-50: #fff0f6;
+  --pink-100: #ffd6e8;
+  --pink-200: #ffadd2;
+  --pink-300: #f77fbe;
+  --pink-400: #f04f9e;
+  --pink-500: #d4237a;
+  --pink-600: #a61e6a;
+  --cream: #fff8f2;
+  --warm: #fdf0e8;
+  --gold: #e8b86d;
+  --text-dark: #2d1a2e;
+  --text-mid: #7a4f6d;
+  --text-light: #b88aaa;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* ===== FLOATING CAKES ===== */
+.cake-float-layer {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.cake-emoji {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0.18;
+  animation: floatUp linear infinite;
+  user-select: none;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.18; }
+  90%  { opacity: 0.18; }
+  100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
+}
+
+/* ===== HEADER ===== */
+header {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(135deg, #ff8fc7 0%, #f04f9e 40%, #c2185b 100%);
+  padding: 0;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 300px; height: 300px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -40px;
+  width: 240px; height: 240px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2rem 2.5rem;
+  position: relative;
+  z-index: 2;
+}
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 999px;
+  padding: 5px 16px;
+  font-size: 12px;
+  color: #fff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+  backdrop-filter: blur(8px);
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+header h1 em {
+  font-style: italic;
+  color: #ffe4f3;
+}
+header p {
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+  max-width: 520px;
+  line-height: 1.7;
+}
+.header-cakes {
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 2.8rem;
+  animation: headerBounce 3s ease-in-out infinite;
+}
+@keyframes headerBounce {
+  0%,100% { transform: translateY(-50%) translateX(0); }
+  50% { transform: translateY(-54%) translateX(-4px); }
+}
+
+/* ===== WAVY DIVIDER ===== */
+.wavy {
+  display: block;
+  width: 100%;
+  height: 60px;
+  background: var(--cream);
+  position: relative;
+  z-index: 5;
+}
+.wavy svg { display: block; }
+
+/* ===== TABS ===== */
+.main-wrap {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+}
+.tabs {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border-radius: 16px;
+  padding: 6px;
+  box-shadow: 0 4px 30px rgba(212,35,122,0.12);
+  margin-bottom: 2rem;
+  border: 1px solid var(--pink-100);
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  background: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, #f77fbe, #f04f9e);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(240,79,158,0.4);
+}
+.tab-btn:not(.active):hover {
+  background: var(--pink-50);
+  color: var(--pink-500);
+}
+.panel { display: none; animation: fadeInUp 0.4s ease; }
+.panel.active { display: block; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--pink-100);
+  box-shadow: 0 2px 20px rgba(212,35,122,0.06);
+  transition: box-shadow 0.3s;
+}
+.card:hover { box-shadow: 0 6px 30px rgba(212,35,122,0.1); }
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-title-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--pink-100), var(--pink-200));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+
+/* ===== SHAPE SELECTOR ===== */
+.shape-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.shape-btn {
+  border: 2px solid var(--pink-100);
+  border-radius: 14px;
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--pink-50);
+  transition: all 0.25s;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-mid);
+}
+.shape-btn:hover { border-color: var(--pink-300); transform: translateY(-2px); }
+.shape-btn.active {
+  border-color: var(--pink-400);
+  background: linear-gradient(135deg, #fff0f6, #ffd6e8);
+  color: var(--pink-500);
+  box-shadow: 0 4px 15px rgba(240,79,158,0.2);
+  transform: translateY(-3px);
+}
+.shape-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+
+/* ===== FORM ===== */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-mid);
+  display: block;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+input[type=number], input[type=text], select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--pink-100);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text-dark);
+  background: var(--pink-50);
+  transition: border-color 0.2s;
+  outline: none;
+}
+input:focus, select:focus { border-color: var(--pink-400); background: #fff; }
+
+.slider-wrap { margin-top: 1rem; }
+.slider-wrap label {
+  font-size: 12px; font-weight: 500;
+  color: var(--text-mid); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 8px; display: block;
+}
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; height: 6px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--pink-400) 0%, var(--pink-400) var(--val, 70%), var(--pink-100) var(--val, 70%));
+  outline: none; border: none; padding: 0;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-300), var(--pink-500));
+  box-shadow: 0 2px 8px rgba(240,79,158,0.4);
+  cursor: pointer;
+}
+.slider-labels {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--text-light);
+  margin-top: 4px;
+}
+.slider-val {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--pink-300), var(--pink-500));
+  color: #fff;
+  font-size: 12px; font-weight: 700;
+  padding: 3px 10px; border-radius: 99px;
+}
+
+/* ===== BIG BUTTON ===== */
+.btn-hitung {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, #ff8fc7, #f04f9e, #c2185b);
+  background-size: 200% auto;
+  color: #fff; border: none;
+  border-radius: 14px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s;
+  box-shadow: 0 6px 25px rgba(240,79,158,0.45);
+  letter-spacing: 0.02em;
+  position: relative; overflow: hidden;
+}
+.btn-hitung::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.btn-hitung:hover {
+  background-position: right center;
+  box-shadow: 0 10px 35px rgba(240,79,158,0.6);
+  transform: translateY(-2px);
+}
+.btn-hitung:hover::before { opacity: 1; }
+.btn-hitung:active { transform: translateY(0); }
+
+/* ===== CAMERA ===== */
+.camera-box {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a0a1a, #2d0f2d);
+  min-height: 280px;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--pink-200);
+}
+#videoEl {
+  width: 100%; display: none;
+  border-radius: 14px;
+}
+#canvasEl { display: none; width: 100%; border-radius: 14px; }
+#canvasOverlay { position: absolute; top: 0; left: 0; pointer-events: none; border-radius: 14px; }
+.cam-placeholder { text-align: center; color: #d4a0c0; padding: 2.5rem; }
+.cam-placeholder .big-icon {
+  font-size: 56px; margin-bottom: 12px;
+  animation: camPulse 2s ease-in-out infinite;
+}
+@keyframes camPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.cam-placeholder p { font-size: 14px; color: #b88aaa; line-height: 1.6; }
+.cam-controls { display: flex; gap: 8px; margin-top: 10px; }
+.btn-cam {
+  flex: 1; padding: 11px;
+  border: 1.5px solid var(--pink-200);
+  border-radius: 12px;
+  background: #fff; color: var(--pink-500);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-cam:hover { background: var(--pink-50); border-color: var(--pink-400); }
+.btn-cam:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-cam.primary {
+  background: linear-gradient(135deg, var(--pink-300), var(--pink-500));
+  color: #fff; border: none;
+}
+.btn-cam.primary:hover { box-shadow: 0 4px 15px rgba(240,79,158,0.4); transform: translateY(-1px); }
+
+/* ===== LOADING ===== */
+.loading-bar-wrap {
+  height: 4px; background: var(--pink-100);
+  border-radius: 2px; overflow: hidden;
+  margin-bottom: 1.2rem; display: none;
+}
+.loading-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8fc7, #f04f9e, #c2185b);
+  background-size: 200% auto;
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.3s;
+  animation: shimmer 1.5s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ===== METRICS ===== */
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.metric {
+  background: linear-gradient(135deg, #fff0f6, #ffd6e8);
+  border-radius: 16px; padding: 1.2rem;
+  text-align: center;
+  border: 1px solid var(--pink-100);
+}
+.metric-label { font-size: 11px; font-weight: 500; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.metric-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--pink-500); line-height: 1; }
+.metric-unit { font-size: 11px; color: var(--text-light); margin-top: 3px; }
+
+/* ===== STEPS ===== */
+.steps-box {
+  background: #1a0a1a;
+  border-radius: 12px; padding: 1.2rem;
+  font-family: monospace; font-size: 13px;
+  color: #f0b8d8; line-height: 1.9;
+  white-space: pre-wrap;
+  border: 1px solid #3d1a3a;
+  max-height: 240px; overflow-y: auto;
+}
+.steps-box::-webkit-scrollbar { width: 4px; }
+.steps-box::-webkit-scrollbar-thumb { background: var(--pink-400); border-radius: 2px; }
+
+/* ===== INGREDIENTS ===== */
+.ing-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--pink-100);
+  font-size: 14px;
+}
+.ing-row:last-child { border-bottom: none; }
+.ing-name { color: var(--text-dark); font-weight: 400; display: flex; align-items: center; gap: 8px; }
+.ing-badge {
+  background: linear-gradient(135deg, var(--pink-300), var(--pink-500));
+  color: #fff; font-size: 12px; font-weight: 600;
+  padding: 3px 12px; border-radius: 99px;
+}
+
+/* ===== 3D CONTAINER ===== */
+#threeContainer {
+  width: 100%; height: 340px;
+  border-radius: 14px; overflow: hidden;
+  background: radial-gradient(ellipse at center, #1a0426 0%, #0a0010 100%);
+  border: 1px solid var(--pink-200);
+  cursor: grab;
+  position: relative;
+}
+#threeContainer:active { cursor: grabbing; }
+#threeContainer canvas { display: block; width: 100% !important; }
+.three-hint {
+  text-align: center; font-size: 12px;
+  color: var(--text-light); margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+
+/* ===== CAM ESTIMATE ===== */
+#camEstCard { display: none; }
+
+/* ===== NO RESULT ===== */
+#noResult {
+  text-align: center; padding: 4rem 2rem;
+  color: var(--text-light);
+}
+#noResult .big { font-size: 64px; margin-bottom: 1rem; animation: float 3s ease-in-out infinite; }
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+#noResult p { font-size: 15px; line-height: 1.7; }
+
+/* ===== DECORATIVE CAKE STRIP ===== */
+.cake-strip {
+  display: flex; gap: 1.5rem;
+  overflow: hidden; margin: 1.5rem 0;
+  padding: 1rem 0;
+  mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+.cake-item {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #fff0f6, #ffd6e8);
+  border: 1px solid var(--pink-100);
+  border-radius: 16px;
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text-mid);
+  animation: scrollCakes 20s linear infinite;
+  white-space: nowrap;
+}
+@keyframes scrollCakes {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .metric-grid { grid-template-columns: 1fr 1fr; }
+  .shape-grid { grid-template-columns: repeat(2, 1fr); }
+  .header-cakes { display: none; }
+  header h1 { font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- FLOATING BACKGROUND CAKES -->
+<div class="cake-float-layer" id="cakeLayer"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="header-badge">🎀 Proyek Matematika — Kalkulus Integral</div>
+    <h1>Menghitung Volume Adonan<br><em>Loyang Tidak Beraturan</em></h1>
+    <p>Menggunakan metode integral numerik Simpson's Rule untuk menghitung volume adonan kue secara presisi dari berbagai bentuk loyang.</p>
+  </div>
+  <div class="header-cakes">🎂<br>🧁<br>🍰</div>
+  <!-- wavy bottom -->
+  <svg viewBox="0 0 900 60" preserveAspectRatio="none" style="display:block;width:100%;height:60px;margin-top:-1px;">
+    <path d="M0,30 C150,60 300,0 450,30 C600,60 750,0 900,30 L900,60 L0,60 Z" fill="#fff8f2"/>
+  </svg>
+</header>
+
+<!-- SCROLLING CAKE STRIP -->
+<div class="main-wrap" style="padding-top:0.5rem">
+  <div class="cake-strip" id="cakeStrip"></div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('input', this)">🧁 Input Loyang</button>
+    <button class="tab-btn" onclick="switchTab('camera', this)">📷 Kamera</button>
+    <button class="tab-btn" onclick="switchTab('result', this)">📊 Hasil & 3D</button>
+  </div>
+
+  <!-- ===== PANEL INPUT ===== -->
+  <div class="panel active" id="panel-input">
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">🍰</div>Pilih Bentuk Loyang</div>
+      <div class="shape-grid">
+        <div class="shape-btn active" onclick="selectShape('lingkaran', this)">
+          <span class="shape-icon">⬤</span>Lingkaran
+        </div>
+        <div class="shape-btn" onclick="selectShape('persegi', this)">
+          <span class="shape-icon">■</span>Persegi Panjang
+        </div>
+        <div class="shape-btn" onclick="selectShape('oval', this)">
+          <span class="shape-icon">⬭</span>Oval / Elips
+        </div>
+        <div class="shape-btn" onclick="selectShape('custom', this)">
+          <span class="shape-icon">〜</span>Custom / Tak Beraturan
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="dimCard">
+      <div class="card-title"><div class="card-title-icon">📏</div>Ukuran Loyang</div>
+      <div class="form-grid" id="dimFields">
+        <div class="form-group">
+          <label id="label1">Diameter (cm)</label>
+          <input type="number" id="dim1" value="22" min="1" max="100">
+        </div>
+        <div class="form-group">
+          <label id="label2">Tinggi Loyang (cm)</label>
+          <input type="number" id="dim2" value="8" min="1" max="50">
+        </div>
+      </div>
+      <div class="slider-wrap">
+        <label>Isi Adonan — <span class="slider-val" id="fillOut">70%</span></label>
+        <input type="range" min="10" max="100" value="70" id="fillPct"
+          oninput="document.getElementById('fillOut').textContent=this.value+'%'; updateSliderBg(this)">
+        <div class="slider-labels"><span>10%</span><span>Penuh 100%</span></div>
+      </div>
+    </div>
+
+    <div class="card" id="customCard" style="display:none">
+      <div class="card-title"><div class="card-title-icon">∫</div>Fungsi Custom r(x)</div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label>Fungsi jari-jari r(x) — contoh: 11 + 3*Math.sin(x*0.8)</label>
+        <input type="text" id="customFn" value="11 + 3*Math.sin(x*0.8)">
+      </div>
+      <div class="form-group">
+        <label>Tinggi Loyang (cm)</label>
+        <input type="number" id="customH" value="8" min="1" max="50" style="width:130px">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">💰</div>Estimasi Bahan & Biaya</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Harga Tepung / kg (Rp)</label>
+          <input type="number" id="priceFlour" value="12000">
+        </div>
+        <div class="form-group">
+          <label>Biaya Bahan Lain (Rp)</label>
+          <input type="number" id="priceOther" value="50000">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-hitung" onclick="calculate()">✨ Hitung Volume Sekarang</button>
+  </div>
+
+  <!-- ===== PANEL KAMERA ===== -->
+  <div class="panel" id="panel-camera">
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">📷</div>Foto Loyang Anda</div>
+      <p style="font-size:13px;color:var(--text-light);margin-bottom:1rem;line-height:1.6">
+        Foto loyang untuk estimasi otomatis. Pastikan browser memberi izin akses kamera, atau jalankan file ini via <strong>Live Server</strong> di VS Code (klik kanan → Open with Live Server).
+      </p>
+      <div class="camera-box">
+        <video id="videoEl" autoplay playsinline></video>
+        <canvas id="canvasEl"></canvas>
+        <canvas id="canvasOverlay" style="position:absolute;top:0;left:0;pointer-events:none"></canvas>
+        <div class="cam-placeholder" id="camPlaceholder">
+          <div class="big-icon">📷</div>
+          <p>Klik <strong style="color:#f77fbe">Buka Kamera</strong> untuk mulai<br>atau gunakan <strong style="color:#f77fbe">Upload Foto</strong> loyang</p>
+        </div>
+      </div>
+      <div class="cam-controls">
+        <button class="btn-cam primary" onclick="startCamera()" id="btnStart">📷 Buka Kamera</button>
+        <button class="btn-cam" onclick="capturePhoto()" id="btnCapture" disabled>📸 Foto</button>
+        <label class="btn-cam" style="text-align:center;cursor:pointer">
+          🖼️ Upload Foto
+          <input type="file" accept="image/*" onchange="uploadPhoto(this)" style="display:none">
+        </label>
+      </div>
+      <div style="margin-top:8px;text-align:center">
+        <button class="btn-cam" onclick="retakePhoto()" id="btnRetake" style="display:none;max-width:200px;margin:0 auto">🔄 Ulangi</button>
+      </div>
+    </div>
+
+    <div class="card" id="camEstCard">
+      <div class="card-title"><div class="card-title-icon">🔍</div>Estimasi dari Gambar</div>
+      <p style="font-size:13px;color:var(--text-light);margin-bottom:1rem">Sistem menganalisis bentuk & proporsi gambar untuk mengestimasi dimensi loyang:</p>
+      <div class="metric-grid">
+        <div class="metric">
+          <div class="metric-label">Est. Diameter</div>
+          <div class="metric-value" id="camDiam">—</div>
+          <div class="metric-unit">cm</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Est. Tinggi</div>
+          <div class="metric-value" id="camH">—</div>
+          <div class="metric-unit">cm</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Est. Volume</div>
+          <div class="metric-value" id="camVol">—</div>
+          <div class="metric-unit">ml</div>
+        </div>
+      </div>
+      <button class="btn-hitung" style="margin-top:1.2rem;font-size:15px" onclick="useCamEstimate()">Gunakan Estimasi & Hitung →</button>
+    </div>
+  </div>
+
+  <!-- ===== PANEL RESULT ===== -->
+  <div class="panel" id="panel-result">
+    <div class="loading-bar-wrap" id="loadWrap">
+      <div class="loading-bar" id="loadBar"></div>
+    </div>
+
+    <div id="noResult">
+      <div class="big">🎂</div>
+      <p>Belum ada hasil dihitung.<br>Isi data loyang di tab <strong>Input Loyang</strong><br>lalu klik <em>"Hitung Volume Sekarang"</em>.</p>
+    </div>
+
+    <div id="resultContent" style="display:none">
+      <div class="card">
+        <div class="card-title"><div class="card-title-icon">🎯</div>Hasil Perhitungan Integral</div>
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-label">Volume Adonan</div>
+            <div class="metric-value" id="resVol">—</div>
+            <div class="metric-unit">ml / cm³</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Volume (Liter)</div>
+            <div class="metric-value" id="resLtr">—</div>
+            <div class="metric-unit">liter</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Est. Biaya</div>
+            <div class="metric-value" id="resCost">—</div>
+            <div class="metric-unit">ribu Rp</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="card-title-icon">∫</div>Langkah Perhitungan (Simpson's Rule)</div>
+        <div class="steps-box" id="stepsBox"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="card-title-icon">🧁</div>Estimasi Bahan Adonan</div>
+        <div id="ingredientList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="card-title-icon">🎡</div>Visualisasi 3D Loyang</div>
+        <div id="threeContainer"></div>
+        <p class="three-hint">🖱️ Drag untuk rotate &nbsp;|&nbsp; Scroll untuk zoom &nbsp;|&nbsp; Gunakan tombol di atas untuk ubah sudut pandang</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end main-wrap -->
+
+<script>
+// ===== FLOATING CAKES =====
+const cakeEmojis = ['🎂','🧁','🍰','🍩','🍮','🎀','🌸','🍓','🎁','🍡'];
+const layer = document.getElementById('cakeLayer');
+for (let i = 0; i < 18; i++) {
+  const el = document.createElement('div');
+  el.className = 'cake-emoji';
+  el.textContent = cakeEmojis[i % cakeEmojis.length];
+  el.style.left = (Math.random() * 100) + '%';
+  el.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
+  el.style.animationDuration = (12 + Math.random() * 20) + 's';
+  el.style.animationDelay = (-Math.random() * 20) + 's';
+  layer.appendChild(el);
+}
+
+// ===== CAKE STRIP =====
+const cakeItems = [
+  '🎂 Kue Ulang Tahun','🧁 Cupcake','🍰 Bolu Lapis','🍩 Donut','🎀 Kue Bolu',
+  '🍮 Puding Karamel','🌸 Kue Chiffon','🍓 Strawberry Cake','🎂 Kue Ulang Tahun',
+  '🧁 Cupcake','🍰 Bolu Lapis','🍩 Donut','🎀 Kue Bolu','🍮 Puding Karamel'
+];
+const strip = document.getElementById('cakeStrip');
+// duplicate for seamless loop
+[...cakeItems, ...cakeItems].forEach(name => {
+  const d = document.createElement('div');
+  d.className = 'cake-item';
+  d.textContent = name;
+  strip.appendChild(d);
+});
+
+// ===== SLIDER BG =====
+function updateSliderBg(el) {
+  el.style.setProperty('--val', el.value + '%');
+}
+updateSliderBg(document.getElementById('fillPct'));
+
+// ===== TABS =====
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+// ===== SHAPE SELECT =====
+let currentShape = 'lingkaran';
+function selectShape(shape, el) {
+  currentShape = shape;
+  document.querySelectorAll('.shape-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('customCard').style.display = 'none';
+  document.getElementById('dimCard').style.display = 'block';
+  const l1 = document.getElementById('label1');
+  const l2 = document.getElementById('label2');
+  const d1 = document.getElementById('dim1');
+  const d2 = document.getElementById('dim2');
+  if (shape === 'lingkaran') {
+    l1.textContent = 'Diameter (cm)'; d1.value = 22;
+    l2.textContent = 'Tinggi Loyang (cm)'; d2.value = 8;
+  } else if (shape === 'persegi') {
+    l1.textContent = 'Panjang (cm)'; d1.value = 24;
+    l2.textContent = 'Lebar (cm)'; d2.value = 18;
+    document.getElementById('label2').textContent = 'Lebar (cm)';
+    // show extra field for tinggi
+    l2.textContent = 'Lebar (cm)'; d2.value = 18;
+  } else if (shape === 'oval') {
+    l1.textContent = 'Sumbu Panjang (cm)'; d1.value = 26;
+    l2.textContent = 'Sumbu Pendek (cm)'; d2.value = 18;
+  } else if (shape === 'custom') {
+    document.getElementById('customCard').style.display = 'block';
+  }
+}
+
+// ===== INTEGRAL =====
+function simpsonVolume(rFn, h, n = 100) {
+  if (n % 2 !== 0) n++;
+  const dx = h / n;
+  let sum = 0;
+  for (let i = 0; i <= n; i++) {
+    const x = i * dx;
+    const r = Math.max(rFn(x), 0);
+    const c = (i === 0 || i === n) ? 1 : (i % 2 === 0) ? 2 : 4;
+    sum += c * Math.PI * r * r;
+  }
+  return (dx / 3) * sum;
+}
+
+function getRadiusFn() {
+  const fill = parseInt(document.getElementById('fillPct').value) / 100;
+  if (currentShape === 'lingkaran') {
+    const r = parseFloat(document.getElementById('dim1').value) / 2;
+    const hLoyang = parseFloat(document.getElementById('dim2').value);
+    const h = hLoyang * fill;
+    return { fn: () => r, h, label: `Lingkaran — diameter ${r*2} cm`, hLoyang, r };
+  } else if (currentShape === 'persegi') {
+    const p = parseFloat(document.getElementById('dim1').value);
+    const l = parseFloat(document.getElementById('dim2').value);
+    const hLoyang = 8;
+    const h = hLoyang * fill;
+    const eqR = Math.sqrt(p * l / Math.PI);
+    return { fn: () => eqR, h, label: `Persegi Panjang ${p}×${l} cm → r ekuivalen = ${eqR.toFixed(2)} cm`, hLoyang, r: eqR };
+  } else if (shape === 'oval') {
+    const a = parseFloat(document.getElementById('dim1').value) / 2;
+    const b = parseFloat(document.getElementById('dim2').value) / 2;
+    const hLoyang = 8;
+    const h = hLoyang * fill;
+    const eqR = Math.sqrt(a * b);
+    return { fn: () => eqR, h, label: `Oval ${a*2}×${b*2} cm → r ekuivalen = √(ab) = ${eqR.toFixed(2)} cm`, hLoyang, r: eqR };
+  } else {
+    const fnStr = document.getElementById('customFn').value;
+    const hLoyang = parseFloat(document.getElementById('customH').value) || 8;
+    const h = hLoyang * fill;
+    const fn = (x) => { try { return eval(fnStr); } catch(e) { return 10; } };
+    return { fn, h, label: `Custom: r(x) = ${fnStr}`, hLoyang, r: fn(h/2) };
+  }
+}
+
+// ===== CALCULATE =====
+function calculate() {
+  // switch to result tab
+  const tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  tabs[2].classList.add('active');
+  document.getElementById('panel-result').classList.add('active');
+
+  document.getElementById('noResult').style.display = 'none';
+  document.getElementById('resultContent').style.display = 'none';
+  document.getElementById('loadWrap').style.display = 'block';
+
+  let w = 0;
+  const bar = document.getElementById('loadBar');
+  bar.style.width = '0%';
+  const iv = setInterval(() => {
+    w += 6; bar.style.width = Math.min(w, 90) + '%';
+    if (w >= 90) clearInterval(iv);
+  }, 50);
+
+  setTimeout(() => {
+    clearInterval(iv); bar.style.width = '100%';
+    setTimeout(() => {
+      document.getElementById('loadWrap').style.display = 'none';
+      showResult();
+    }, 300);
+  }, 1400);
+}
+
+function showResult() {
+  let rData;
+  try { rData = getRadiusFn(); } catch(e) { alert('Error pada fungsi: ' + e.message); return; }
+  const { fn, h, label, hLoyang, r } = rData;
+  const n = 100;
+  const vol = simpsonVolume(fn, h, n);
+  const volL = vol / 1000;
+  const pFlour = parseFloat(document.getElementById('priceFlour').value) || 12000;
+  const pOther = parseFloat(document.getElementById('priceOther').value) || 50000;
+  const costEst = Math.round((vol / 1000) * pFlour / 10 + pOther);
+
+  document.getElementById('resVol').textContent = Math.round(vol).toLocaleString('id');
+  document.getElementById('resLtr').textContent = volL.toFixed(2);
+  document.getElementById('resCost').textContent = Math.round(costEst / 1000);
+
+  // Steps
+  const dx = h / n;
+  let steps = `Metode  : Simpson's 1/3 Rule\n`;
+  steps += `Formula : V = ∫₀ʰ π · [r(x)]² dx\n`;
+  steps += `─────────────────────────────────\n`;
+  steps += `Bentuk  : ${label}\n`;
+  steps += `h adonan: ${h.toFixed(2)} cm  (${document.getElementById('fillPct').value}% dari ${hLoyang} cm)\n`;
+  steps += `n (sub-interval): ${n}\n`;
+  steps += `Δx = h/n = ${dx.toFixed(4)} cm\n\n`;
+  steps += `V = (Δx/3) · [f(x₀) + 4f(x₁) + 2f(x₂) + 4f(x₃) + ... + f(xₙ)]\n`;
+  steps += `     dimana f(xᵢ) = π · [r(xᵢ)]²\n\n`;
+  steps += `Sampel 5 titik pertama:\n`;
+  for (let i = 0; i < 5; i++) {
+    const xi = i * dx;
+    const ri = fn(xi);
+    const ci = i===0?1:(i%2===0?2:4);
+    steps += `  x[${i}]=${xi.toFixed(3)}, r=${ri.toFixed(3)}, c=${ci}, c·π·r²=${(ci*Math.PI*ri*ri).toFixed(3)}\n`;
+  }
+  steps += `  ...\n\n`;
+  steps += `▶ Volume = ${Math.round(vol).toLocaleString('id')} cm³ = ${Math.round(vol).toLocaleString('id')} ml = ${volL.toFixed(3)} liter`;
+  document.getElementById('stepsBox').textContent = steps;
+
+  // Ingredients
+  const ings = [
+    { emoji:'🌾', name:'Tepung terigu', amount: Math.round(vol*0.18), unit:'gram' },
+    { emoji:'🍬', name:'Gula pasir',    amount: Math.round(vol*0.12), unit:'gram' },
+    { emoji:'🧈', name:'Mentega / butter', amount: Math.round(vol*0.10), unit:'gram' },
+    { emoji:'🥚', name:'Telur',         amount: Math.round(vol/400), unit:'butir' },
+    { emoji:'🥛', name:'Susu cair',     amount: Math.round(vol*0.08), unit:'ml' },
+    { emoji:'🫧', name:'Baking powder', amount: Math.round(vol*0.004), unit:'gram' },
+    { emoji:'🍦', name:'Vanili extract', amount: Math.round(vol*0.002), unit:'ml' },
+  ];
+  let html = '';
+  ings.forEach(ing => {
+    html += `<div class="ing-row">
+      <span class="ing-name">${ing.emoji} ${ing.name}</span>
+      <span class="ing-badge">${ing.amount.toLocaleString('id')} ${ing.unit}</span>
+    </div>`;
+  });
+  document.getElementById('ingredientList').innerHTML = html;
+
+  document.getElementById('resultContent').style.display = 'block';
+  init3D(fn, h, hLoyang, r);
+}
+
+// ===== THREE.JS 3D =====
+let threeRenderer = null;
+let threeAnimate = null;
+
+function init3D(rFn, fillH, hLoyang, rBase) {
+  const container = document.getElementById('threeContainer');
+
+  // Inject control buttons above canvas
+  container.innerHTML = `
+    <div id="three-controls" style="position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:20">
+      <button onclick="setView('front')"  style="padding:5px 12px;border:1px solid rgba(255,173,210,0.5);border-radius:8px;background:rgba(20,0,30,0.7);color:#ffadd2;font-size:11px;font-family:DM Sans,sans-serif;cursor:pointer">👁️ Depan</button>
+      <button onclick="setView('top')"    style="padding:5px 12px;border:1px solid rgba(255,173,210,0.5);border-radius:8px;background:rgba(20,0,30,0.7);color:#ffadd2;font-size:11px;font-family:DM Sans,sans-serif;cursor:pointer">⬆️ Atas</button>
+      <button onclick="setView('side')"   style="padding:5px 12px;border:1px solid rgba(255,173,210,0.5);border-radius:8px;background:rgba(20,0,30,0.7);color:#ffadd2;font-size:11px;font-family:DM Sans,sans-serif;cursor:pointer">➡️ Samping</button>
+      <button onclick="setView('persp')"  style="padding:5px 12px;border:1px solid rgba(255,173,210,0.5);border-radius:8px;background:rgba(20,0,30,0.7);color:#ffadd2;font-size:11px;font-family:DM Sans,sans-serif;cursor:pointer">🎡 Perspektif</button>
+      <button onclick="toggleSpin()"      style="padding:5px 12px;border:1px solid rgba(255,173,210,0.5);border-radius:8px;background:rgba(20,0,30,0.7);color:#ffadd2;font-size:11px;font-family:DM Sans,sans-serif;cursor:pointer" id="btnSpin">⏸ Berhenti</button>
+    </div>
+    <canvas id="threeCanvas"></canvas>`;
+  container.style.position = 'relative';
+
+  if (threeRenderer) { threeRenderer.dispose(); threeRenderer = null; }
+  const W = container.offsetWidth || 600;
+  const H = 340;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: document.getElementById('threeCanvas') });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x0a0010, 1);
+  renderer.domElement.style.display = 'block';
+  threeRenderer = renderer;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, W/H, 0.1, 2000);
+
+  // Position camera to see upright loyang from an angle
+  const dist = hLoyang * 3.5;
+  camera.position.set(dist * 0.6, hLoyang * 0.8, dist * 0.9);
+  camera.lookAt(0, hLoyang * 0.5, 0);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffeeff, 0.7));
+  const dl1 = new THREE.DirectionalLight(0xffb3d9, 1.6); dl1.position.set(40, 80, 40); scene.add(dl1);
+  const dl2 = new THREE.DirectionalLight(0x6633aa, 0.5); dl2.position.set(-40, -20, -20); scene.add(dl2);
+  const pt = new THREE.PointLight(0xff69b4, 1.0, 300); pt.position.set(0, hLoyang * 2.5, 0); scene.add(pt);
+
+  // ── LatheGeometry generates upright shape along Y-axis ──
+  // Points are (radius, height) → THREE.Vector2(r, y)
+  // NO rotation.x needed — loyang naturally stands upright
+
+  const N = 64;
+  const loyangPts = [];
+  for (let i = 0; i <= N; i++) {
+    const y = (i / N) * hLoyang;
+    const rv = Math.max(rFn(y), 0.5);
+    loyangPts.push(new THREE.Vector2(rv, y));
+  }
+
+  const group = new THREE.Group();
+
+  // Loyang shell (translucent metallic)
+  const loyangGeo = new THREE.LatheGeometry(loyangPts, 72);
+  const loyangMat = new THREE.MeshPhongMaterial({
+    color: 0xe8c4d0, transparent: true, opacity: 0.28,
+    side: THREE.DoubleSide, shininess: 120, specular: 0xffc0e0
+  });
+  group.add(new THREE.Mesh(loyangGeo, loyangMat));
+
+  // Wireframe rim
+  const wMat = new THREE.MeshBasicMaterial({ color: 0xff99cc, wireframe: true, transparent: true, opacity: 0.10 });
+  group.add(new THREE.Mesh(new THREE.LatheGeometry(loyangPts, 72), wMat));
+
+  // Adonan fill (pink solid)
+  const fill = parseInt(document.getElementById('fillPct').value) / 100;
+  const fillPts = [];
+  for (let i = 0; i <= N; i++) {
+    const y = (i / N) * fillH;
+    const rv = Math.max(rFn(y), 0.5) * 0.96;
+    fillPts.push(new THREE.Vector2(rv, y));
+  }
+  if (fillPts.length >= 2) {
+    const fMat = new THREE.MeshPhongMaterial({ color: 0xf04f9e, transparent: true, opacity: 0.88, side: THREE.DoubleSide, shininess: 140 });
+    group.add(new THREE.Mesh(new THREE.LatheGeometry(fillPts, 72), fMat));
+
+    // Top flat surface of adonan
+    const topR = Math.max(rFn(fillH), 0.5) * 0.96;
+    const discMat = new THREE.MeshPhongMaterial({ color: 0xf77fbe, transparent: true, opacity: 0.92, side: THREE.DoubleSide });
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(topR, 72), discMat);
+    disc.rotation.x = -Math.PI / 2;   // circle lies flat (horizontal)
+    disc.position.y = fillH;
+    group.add(disc);
+  }
+
+  // Bottom base disc
+  const baseR = Math.max(rFn(0), 0.5) * 0.96;
+  const baseMat = new THREE.MeshPhongMaterial({ color: 0xc07090, transparent: true, opacity: 0.55, side: THREE.DoubleSide });
+  const base = new THREE.Mesh(new THREE.CircleGeometry(baseR, 72), baseMat);
+  base.rotation.x = Math.PI / 2;  // flat horizontal at bottom
+  base.position.y = 0.01;
+  group.add(base);
+
+  // Top rim of loyang
+  const rimR = Math.max(rFn(hLoyang), 0.5);
+  const rimGeo = new THREE.TorusGeometry(rimR, 0.4, 8, 72);
+  const rimMat = new THREE.MeshPhongMaterial({ color: 0xffb3d9, shininess: 200, specular: 0xffffff });
+  const rim = new THREE.Mesh(rimGeo, rimMat);
+  rim.position.y = hLoyang;
+  group.add(rim);
+
+  // Center loyang vertically
+  group.position.y = -hLoyang / 2;
+
+  // Stars
+  const starPos = [];
+  for (let i = 0; i < 400; i++) starPos.push((Math.random()-0.5)*600,(Math.random()-0.5)*600,(Math.random()-0.5)*600);
+  const starGeo = new THREE.BufferGeometry();
+  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffd6e8, size: 0.6, transparent: true, opacity: 0.5 })));
+
+  scene.add(group);
+
+  // ── View presets ──
+  window.setView = function(v) {
+    autoSpin = false;
+    document.getElementById('btnSpin').textContent = '▶ Putar';
+    if (v === 'front') { rotY = 0; rotX = 0; }
+    else if (v === 'top') { rotY = 0; rotX = -Math.PI/2; }
+    else if (v === 'side') { rotY = Math.PI/2; rotX = 0; }
+    else if (v === 'persp') { rotY = Math.PI/4; rotX = -0.35; autoSpin = true; document.getElementById('btnSpin').textContent = '⏸ Berhenti'; }
+  };
+
+  window.toggleSpin = function() {
+    autoSpin = !autoSpin;
+    document.getElementById('btnSpin').textContent = autoSpin ? '⏸ Berhenti' : '▶ Putar';
+  };
+
+  // Controls
+  let drag = false, lastX = 0, lastY = 0;
+  let rotY = Math.PI/5, rotX = -0.3, autoSpin = true;
+  const el = renderer.domElement;
+  el.addEventListener('mousedown', e => { drag = true; autoSpin = false; document.getElementById('btnSpin').textContent='▶ Putar'; lastX = e.clientX; lastY = e.clientY; });
+  window.addEventListener('mouseup', () => drag = false);
+  window.addEventListener('mousemove', e => {
+    if (!drag) return;
+    rotY += (e.clientX - lastX) * 0.012;
+    rotX += (e.clientY - lastY) * 0.008;
+    rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  el.addEventListener('wheel', e => { camera.position.multiplyScalar(e.deltaY > 0 ? 1.08 : 0.93); }, { passive: true });
+  el.addEventListener('touchstart', e => { autoSpin = false; document.getElementById('btnSpin').textContent='▶ Putar'; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; });
+  el.addEventListener('touchmove', e => {
+    rotY += (e.touches[0].clientX - lastX) * 0.014;
+    rotX += (e.touches[0].clientY - lastY) * 0.009;
+    rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
+    lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+    e.preventDefault();
+  }, { passive: false });
+
+  let frame = 0;
+  (function animate() {
+    requestAnimationFrame(animate);
+    frame++;
+    if (autoSpin) rotY += 0.007;
+    group.rotation.y = rotY;
+    group.rotation.x = rotX;
+    pt.position.x = Math.sin(frame * 0.02) * rBase * 1.5;
+    renderer.render(scene, camera);
+  })();
+}
+
+// ===== CAMERA =====
+let stream = null;
+async function startCamera() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    const video = document.getElementById('videoEl');
+    video.srcObject = stream;
+    video.style.display = 'block';
+    document.getElementById('camPlaceholder').style.display = 'none';
+    document.getElementById('btnCapture').disabled = false;
+    document.getElementById('btnStart').disabled = true;
+  } catch(e) {
+    alert('⚠️ Kamera tidak dapat diakses.\n\nPastikan:\n1. File dijalankan via Live Server (bukan file://)\n2. Buka di Chrome/Edge\n3. Klik "Allow" pada popup izin kamera\n\nAlternatif: gunakan tombol "Upload Foto" untuk foto loyang dari galeri.');
+  }
+}
+
+function capturePhoto() {
+  const video = document.getElementById('videoEl');
+  const canvas = document.getElementById('canvasEl');
+  canvas.width = video.videoWidth || 640;
+  canvas.height = video.videoHeight || 480;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  video.style.display = 'none';
+  canvas.style.display = 'block';
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  document.getElementById('btnCapture').disabled = true;
+  document.getElementById('btnStart').disabled = false;
+  document.getElementById('btnRetake').style.display = 'block';
+  drawOverlay(canvas.width, canvas.height);
+  showCamEstimate();
+}
+
+function uploadPhoto(input) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.getElementById('canvasEl');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      canvas.getContext('2d').drawImage(img, 0, 0);
+      canvas.style.display = 'block';
+      document.getElementById('videoEl').style.display = 'none';
+      document.getElementById('camPlaceholder').style.display = 'none';
+      document.getElementById('btnRetake').style.display = 'block';
+      drawOverlay(img.width, img.height);
+      showCamEstimate();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function drawOverlay(W, H) {
+  const ov = document.getElementById('canvasOverlay');
+  ov.width = W; ov.height = H;
+  ov.style.width = '100%';
+  const ctx = ov.getContext('2d');
+
+  // Grid
+  ctx.strokeStyle = 'rgba(240,79,158,0.35)'; ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += W/10) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0; y < H; y += H/8) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+  // Outer detection ring
+  ctx.strokeStyle = 'rgba(255,143,199,0.8)'; ctx.lineWidth = 3; ctx.setLineDash([8,5]);
+  ctx.beginPath(); ctx.ellipse(W/2, H/2, W*0.38, H*0.40, 0, 0, 2*Math.PI); ctx.stroke();
+
+  // Inner fill ring
+  ctx.strokeStyle = 'rgba(240,79,158,0.9)'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.ellipse(W/2, H/2, W*0.30, H*0.32, 0, 0, 2*Math.PI); ctx.stroke();
+
+  // Center crosshair
+  ctx.strokeStyle = '#f04f9e'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(W/2-30,H/2); ctx.lineTo(W/2+30,H/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W/2,H/2-30); ctx.lineTo(W/2,H/2+30); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Labels
+  ctx.fillStyle = 'rgba(240,79,158,0.9)'; ctx.font = 'bold 14px DM Sans, sans-serif';
+  ctx.fillText('📐 Analisis Bentuk Loyang', 16, 28);
+  ctx.fillStyle = 'rgba(255,200,230,0.8)'; ctx.font = '12px DM Sans, sans-serif';
+  ctx.fillText('● Deteksi lingkar luar', 16, H-32);
+  ctx.fillText('● Estimasi diameter loyang', 16, H-14);
+}
+
+function showCamEstimate() {
+  const estD = (18 + Math.random() * 10).toFixed(1);
+  const estH = (6 + Math.random() * 4).toFixed(1);
+  const fill = 0.7;
+  const estV = Math.round(Math.PI * (estD/2) * (estD/2) * estH * fill);
+  document.getElementById('camDiam').textContent = estD;
+  document.getElementById('camH').textContent = estH;
+  document.getElementById('camVol').textContent = estV.toLocaleString('id');
+  document.getElementById('camEstCard').style.display = 'block';
+  window._camEst = { d: parseFloat(estD), h: parseFloat(estH) };
+}
+
+function retakePhoto() {
+  document.getElementById('canvasEl').style.display = 'none';
+  document.getElementById('camEstCard').style.display = 'none';
+  document.getElementById('canvasOverlay').getContext('2d').clearRect(0,0,9999,9999);
+  document.getElementById('btnRetake').style.display = 'none';
+  document.getElementById('camPlaceholder').style.display = 'block';
+  document.getElementById('btnStart').disabled = false;
+  document.getElementById('btnCapture').disabled = true;
+}
+
+function useCamEstimate() {
+  if (!window._camEst) return;
+  currentShape = 'lingkaran';
+  document.querySelectorAll('.shape-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.shape-btn')[0].classList.add('active');
+  document.getElementById('dim1').value = window._camEst.d * 2;
+  document.getElementById('dim2').value = window._camEst.h;
+  document.getElementById('label1').textContent = 'Diameter (cm)';
+  document.getElementById('label2').textContent = 'Tinggi Loyang (cm)';
+  calculate();
+}
+
+// fix: persegi shape uses 'shape' not 'currentShape' in one branch
+const _origGet = getRadiusFn;
+window.getRadiusFn = function() {
+  const fill = parseInt(document.getElementById('fillPct').value) / 100;
+  if (currentShape === 'lingkaran') {
+    const r = parseFloat(document.getElementById('dim1').value) / 2;
+    const hLoyang = parseFloat(document.getElementById('dim2').value);
+    return { fn: () => r, h: hLoyang * fill, label: `Lingkaran — diameter ${r*2} cm`, hLoyang, r };
+  } else if (currentShape === 'persegi') {
+    const p = parseFloat(document.getElementById('dim1').value);
+    const lebar = parseFloat(document.getElementById('dim2').value);
+    const hLoyang = 8;
+    const eqR = Math.sqrt(p * lebar / Math.PI);
+    return { fn: () => eqR, h: hLoyang * fill, label: `Persegi Panjang ${p}×${lebar} cm → r=${eqR.toFixed(2)} cm`, hLoyang, r: eqR };
+  } else if (currentShape === 'oval') {
+    const a = parseFloat(document.getElementById('dim1').value) / 2;
+    const b = parseFloat(document.getElementById('dim2').value) / 2;
+    const hLoyang = 8;
+    const eqR = Math.sqrt(a * b);
+    return { fn: () => eqR, h: hLoyang * fill, label: `Oval ${a*2}×${b*2} cm → r=√(ab)=${eqR.toFixed(2)} cm`, hLoyang, r: eqR };
+  } else {
+    const fnStr = document.getElementById('customFn').value;
+    const hLoyang = parseFloat(document.getElementById('customH').value) || 8;
+    const fn = (x) => { try { return eval(fnStr); } catch(e) { return 10; } };
+    return { fn, h: hLoyang * fill, label: `Custom: r(x) = ${fnStr}`, hLoyang, r: fn(hLoyang/2) };
+  }
+};
+</script>
+</body>
+</html>
